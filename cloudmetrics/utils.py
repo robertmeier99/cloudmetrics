@@ -2,6 +2,8 @@ import numpy as np
 from scipy.spatial import cKDTree
 from skimage.measure import label, regionprops
 
+def dropna(array):
+    return array[np.isfinite(array)]
 
 def create_circular_mask(h, w):
     center = (int(w / 2), int(h / 2))
