@@ -6,12 +6,14 @@ import numpy as np
 
 def cloud_fraction(mask):
     """
-    Compute metric(s) for a single field
+    Compute metric(s) for a single field containing NaNs at its boundaries
+    (as it often occurs with geostationary satellite images)
 
     Parameters
     ----------
-    field : numpy array of shape (npx,npx) - npx is number of pixels
-            (cloud) mask field.
+    mask : numpy array of shape (npx,npx) - npx is number of pixels
+            (cloud) mask field with values 1 (cloud), 0 (no cloud)
+            and NaN at the boundaries (lat/lon cut off)
 
     Returns
     -------
@@ -19,5 +21,6 @@ def cloud_fraction(mask):
         cloud fraction.
 
     """
+    is_finite = np.isfinite(mask)
 
-    return np.count_nonzero(mask) / mask.size
+    return np.sum(mask[is_finite]) / np.sum(is_finite)
