@@ -66,7 +66,11 @@ def open_sky(mask, summary_measure="max", periodic_domain=False, debug=False):
                 w = (
                     ws[-1]
                     if ws.size > 0
-                    else (es[-1] - npx_cols) if periodic_domain and es.size > 0 else 0
+                    else (
+                        es[-1] - npx_cols 
+                        if periodic_domain and es.size > 0 
+                        else 0
+                    )
                 )
                 e = (
                     es[0] - 1
@@ -80,7 +84,11 @@ def open_sky(mask, summary_measure="max", periodic_domain=False, debug=False):
                 n = (
                     ns[-1]
                     if ns.size > 0
-                    else (ss[-1] - npx_rows) if periodic_domain and ss.size > 0 else 0
+                    else (
+                        ss[-1] - npx_rows 
+                        if periodic_domain and ss.size > 0 
+                        else 0
+                    )
                 )
                 s = (
                     ss[0] - 1
@@ -170,7 +178,11 @@ def open_sky_stats(mask, percentile=95, periodic_domain=False, debug=False):
                 w = (
                     ws[-1]
                     if ws.size > 0
-                    else (es[-1] - npx_cols) if periodic_domain and es.size > 0 else 0
+                    else (
+                        es[-1] - npx_cols 
+                        if periodic_domain and es.size > 0 
+                        else 0
+                    )
                 )
                 e = (
                     es[0] - 1
@@ -184,7 +196,11 @@ def open_sky_stats(mask, percentile=95, periodic_domain=False, debug=False):
                 n = (
                     ns[-1]
                     if ns.size > 0
-                    else (ss[-1] - npx_rows) if periodic_domain and ss.size > 0 else 0
+                    else (
+                        ss[-1] - npx_rows 
+                        if periodic_domain and ss.size > 0 
+                        else 0
+                    )
                 )
                 s = (
                     ss[0] - 1
