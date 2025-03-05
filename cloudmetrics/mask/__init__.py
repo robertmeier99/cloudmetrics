@@ -4,7 +4,7 @@ import sys
 from .cloud_fraction import cloud_fraction  # noqa
 from .fractal_dimension import fractal_dimension  # noqa
 from .objects import *  # noqa
-from .open_sky import open_sky  # noqa
+from .open_sky import open_sky, open_sky_stats  # noqa
 from .orientation import orientation  # noqa
 
 
