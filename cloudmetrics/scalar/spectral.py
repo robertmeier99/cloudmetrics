@@ -526,6 +526,27 @@ def spectral_length_moment(k1d, psd_1d_rad, order=1):
     return l_spec
 
 
+def compute_spectral_length_moment(
+    scalar_field,
+    dx=1,
+    periodic_domain=False,
+    apply_detrending=False,
+    window=None,
+    order=1,
+):
+    k1d, psd_1d_rad = compute_spectra(
+        scalar_field,
+        dx=dx,
+        periodic_domain=periodic_domain,
+        apply_detrending=apply_detrending,
+        window=window,
+    )[0:2]
+
+    l_spec_moment = spectral_length_moment(k1d, psd_1d_rad, order=order)
+
+    return l_spec_moment
+
+
 def compute_all_spectral(
     scalar_field,
     dx=1,
