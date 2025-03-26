@@ -3,6 +3,7 @@
 
 import numpy as np
 from numba import jit, prange
+from scipy.spatial import cKDTree
 
 
 @jit(nopython=True, parallel=True)
@@ -66,11 +67,7 @@ def open_sky(mask, summary_measure="max", periodic_domain=False, debug=False):
                 w = (
                     ws[-1]
                     if ws.size > 0
-                    else (
-                        es[-1] - npx_cols 
-                        if periodic_domain and es.size > 0 
-                        else 0
-                    )
+                    else (es[-1] - npx_cols if periodic_domain and es.size > 0 else 0)
                 )
                 e = (
                     es[0] - 1
@@ -84,11 +81,7 @@ def open_sky(mask, summary_measure="max", periodic_domain=False, debug=False):
                 n = (
                     ns[-1]
                     if ns.size > 0
-                    else (
-                        ss[-1] - npx_rows 
-                        if periodic_domain and ss.size > 0 
-                        else 0
-                    )
+                    else (ss[-1] - npx_rows if periodic_domain and ss.size > 0 else 0)
                 )
                 s = (
                     ss[0] - 1
@@ -144,7 +137,7 @@ def open_sky_stats(mask, percentile=95, periodic_domain=False, debug=False):
 
     Returns
     -------
-    open_sky:        `summary_measure` (default "max") of open-sky regions
+    open_sky:        maximum, given percentile and mean of open-sky regions
                      identified in mask
 
     """
@@ -178,11 +171,7 @@ def open_sky_stats(mask, percentile=95, periodic_domain=False, debug=False):
                 w = (
                     ws[-1]
                     if ws.size > 0
-                    else (
-                        es[-1] - npx_cols 
-                        if periodic_domain and es.size > 0 
-                        else 0
-                    )
+                    else (es[-1] - npx_cols if periodic_domain and es.size > 0 else 0)
                 )
                 e = (
                     es[0] - 1
@@ -196,11 +185,7 @@ def open_sky_stats(mask, percentile=95, periodic_domain=False, debug=False):
                 n = (
                     ns[-1]
                     if ns.size > 0
-                    else (
-                        ss[-1] - npx_rows 
-                        if periodic_domain and ss.size > 0 
-                        else 0
-                    )
+                    else (ss[-1] - npx_rows if periodic_domain and ss.size > 0 else 0)
                 )
                 s = (
                     ss[0] - 1
@@ -222,6 +207,37 @@ def open_sky_stats(mask, percentile=95, periodic_domain=False, debug=False):
     a_os_avg = np.nanmean(a_os_clear_only) / finite_size
 
     return os_max, os_perc, a_os_avg
+
+
+def open_sky_rad(mask):
+    """
+    Compute maximum open sky radius on cloud mask.
+
+    Parameters
+    ----------
+    mask:               numpy array of shape (npx,npx) - npx is number of pixels
+                        (cloud) mask field.
+
+    Returns
+    -------
+    open_sky_rad_max:   maximum radius of circular open-sky region
+                        identified in mask
+    """
+    # get indices of clear-sky and cloudy pixels
+    cloud_pixels = np.argwhere(mask != 0)
+    clear_pixels = np.argwhere(mask == 0)
+
+    # handle edge case of full cloudy mask
+    if len(cloud_pixels) == mask.size:
+        return 0
+
+    # Build a KD-tree for fast nearest-neighbor search
+    cloud_tree = cKDTree(cloud_pixels)
+
+    # Find the nearest cloudy pixel distance for each clear sky pixel
+    distances, _ = cloud_tree.query(clear_pixels)
+
+    return np.max(distances)
 
 
 def _debug_plot(mask, osc, wmax, nmax, emax, smax):

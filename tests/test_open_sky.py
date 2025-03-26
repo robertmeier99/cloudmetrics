@@ -75,6 +75,14 @@ def test_open_sky_stats(periodic_domain):
         )
 
 
+def test_open_sky_rad():
+    os_rad = cloudmetrics.mask.open_sky_rad(mask=EXAMPLE_MASK)
+
+    assert not np.isnan(os_rad)
+
+    np.testing.assert_allclose([os_rad], [5.39], atol=0.01)
+
+
 @pytest.mark.parametrize("periodic_domain", [True, False])
 @pytest.mark.parametrize("op", ["mean", "max"])
 def test_open_sky_extremes(periodic_domain, op):
