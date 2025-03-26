@@ -110,3 +110,25 @@ def std(scalar_field, mask=None):
         return np.std(scalar_field)
 
     return np.std(scalar_field[mask])
+
+
+def perc(scalar_field, percentile=5, mask=None):
+    """
+    Compute a given percentile of an optionally masked scalar field
+
+    Parameters
+    ----------
+    scalar_field : numpy array of shape (npx,npx) - npx is number of pixels
+        Scalar for which to calculate the percentile value.
+    mask : Optional (Boolean) mask. If passed, the percentile will be computed over the
+        masked (True) pixels.
+
+    Returns
+    -------
+    perc : float
+        Percentile value of the (masked) field
+    """
+    if mask is None:
+        return np.percentile(scalar_field, percentile)
+
+    return np.percentile(scalar_field[mask], percentile)
