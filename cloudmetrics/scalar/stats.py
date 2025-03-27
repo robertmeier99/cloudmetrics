@@ -132,3 +132,26 @@ def perc(scalar_field, percentile=5, mask=None):
         return np.percentile(scalar_field, percentile)
 
     return np.percentile(scalar_field[mask], percentile)
+
+
+def high_cloud_fraction(scalar_field, threshold):
+    """
+    Compute fraction of temperatures in a scalar field below a certain threshold.
+    Corresponds to fraction of high clouds.
+
+    Parameters
+    ----------
+    scalar_field : numpy array of shape (npx,npx) - npx is number of pixels
+        Scalar for which to calculate the percentile value.
+    threshold : float
+        brightness temperature threshold value for high clouds
+
+    Returns
+    -------
+    hcf : float
+        high cloud fraction.
+
+    """
+    is_finite = np.isfinite(scalar_field)
+
+    return np.sum(is_finite * (scalar_field < threshold)) / np.sum(is_finite)
