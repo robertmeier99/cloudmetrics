@@ -3,6 +3,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+from cloud_fraction import cloud_fraction
 
 from ..utils import compute_r_squared
 
@@ -45,6 +46,11 @@ def fractal_dimension(mask, debug=False):
         Fractal (box-counting) dimension.
 
     """
+    # consider extreme cases
+    cf = cloud_fraction(mask)
+    if cf == 1 or cf == 0:
+        return np.nan
+
     Z = mask < 0.5
     p = min(Z.shape)
     n = 2 ** np.floor(np.log(p) / np.log(2))
