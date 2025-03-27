@@ -6,7 +6,7 @@ import numpy as np
 
 def cloud_fraction(mask):
     """
-    Compute metric(s) for a single field containing NaNs at its boundaries
+    Compute cloud fraction for a binary field containing NaNs at its boundaries
     (as it often occurs with geostationary satellite images)
 
     Parameters
