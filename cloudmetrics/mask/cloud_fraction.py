@@ -22,5 +22,9 @@ def cloud_fraction(mask):
 
     """
     is_finite = np.isfinite(mask)
+    finite_sum = np.sum(is_finite)
 
-    return np.sum(mask[is_finite]) / np.sum(is_finite)
+    if finite_sum == 0:
+        return np.nan
+    else:
+        return np.sum(mask[is_finite]) / finite_sum
