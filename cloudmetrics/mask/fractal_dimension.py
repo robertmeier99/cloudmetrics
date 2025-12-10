@@ -3,7 +3,6 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from cloud_fraction import cloud_fraction
 
 from ..utils import compute_r_squared
 
@@ -47,7 +46,7 @@ def fractal_dimension(mask, debug=False):
 
     """
     # consider extreme cases
-    cf = cloud_fraction(mask)
+    cf = np.sum(mask[np.isfinite(mask)]) / np.sum(np.isfinite(mask))
     if cf == 1 or cf == 0:
         return np.nan
 
@@ -62,12 +61,13 @@ def fractal_dimension(mask, debug=False):
 
     # Fit the relation: counts = coeffs[1]*sizes**coeffs[0]; coeffs[0]=-Nd
     coeffs = np.polyfit(np.log(sizes), np.log(counts), 1)
-    r_squared = compute_r_squared(
-        lambda x, c: c[1] + c[0] * x, coeffs, np.log(sizes), np.log(counts)
-    )
     fractal_dim = -coeffs[0]
 
     if debug:
+        r_squared = compute_r_squared(
+            lambda x, c: c[1] + c[0] * x, coeffs, np.log(sizes), np.log(counts)
+        )
+
         _debug_plot(mask, sizes, counts, fractal_dim, r_squared)
 
     return fractal_dim
